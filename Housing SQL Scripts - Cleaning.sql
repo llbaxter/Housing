@@ -138,10 +138,29 @@ SELECT *,
 
 FROM Housing..NashvilleHousing
 )
+DELETE
+FROM RowNumCTE
+WHERE row_num > 1
+
+WITH RowNumCTE AS
+(
+SELECT *,
+	ROW_NUMBER() OVER (
+	PARTITION BY ParcelID,
+				 PropertyAddress,
+				 SalePrice,
+				 SaleDate,
+				 LegalReference
+				 ORDER BY
+					UniqueID
+					) row_num
+FROM Housing..NashvilleHousing
+)
 SELECT *
 FROM RowNumCTE
 WHERE row_num > 1
 ORDER BY PropertyAddress
+
 
 SELECT *
 FROM Housing..NashvilleHousing
